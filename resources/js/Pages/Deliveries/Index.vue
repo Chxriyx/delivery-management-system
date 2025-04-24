@@ -8,13 +8,15 @@ function goToPage(url) {
 }
 
 function updateStatus(deliveryId, status) {
-    router.put(`/deliveries/${deliveryId}/status`, { status })
-    .then(() => {
-      router.reload()
-    })
-    .catch(error => {
-      console.error(error)
-    })
+  router.put(`/deliveries/${deliveryId}/status`, { status }, {
+    preserveState: true,
+    onSuccess: () => {
+      router.reload({ preserveScroll: true })
+    },
+    onError: (errors) => {
+      console.error(errors)
+    }
+  })
 }
 
 
@@ -61,12 +63,13 @@ function updateStatus(deliveryId, status) {
                     v-model="delivery.status"
                     @change="updateStatus(delivery.id, delivery.status)"
                     >
-                    <option value="Shipped">Shipped</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Shipped">Ship</option>
                     <option
                         value="Cancelled"
                         :disabled="delivery.status === 'Shipped'"
                     >
-                        Cancelled
+                        Cancel
                     </option>
                 </select>
         </td>

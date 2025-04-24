@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('pickup_address');
             $table->string('pickup_name');
             $table->string('pickup_contact');
-            $table->string('pickup_email');
+            $table->string('pickup_email')->nullable();
             $table->string('delivery_address');
             $table->string('delivery_name');
             $table->string('delivery_contact');
-            $table->string('delivery_email');
+            $table->string('delivery_email')->nullable();
             $table->enum('type_of_good', ['Document', 'Parcel']);
             $table->enum('delivery_provider', ['DEHL', 'STARTRACK','ZOOM2U','TGE']);
             $table->enum('priority', ['Standard', 'Express', 'Immediate']);

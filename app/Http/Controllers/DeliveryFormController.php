@@ -38,12 +38,12 @@ class DeliveryFormController extends Controller
             'pickup_address' => 'required|string',
             'pickup_name' => 'required|string',
             'pickup_contact' => 'required|string',
-            'pickup_email' => 'required|email',
+            'pickup_email' => 'nullable|email',
 
             'delivery_address' => 'required|string',
             'delivery_name' => 'required|string',
             'delivery_contact' => 'required|string',
-            'delivery_email' => 'required|email',
+            'delivery_email' => 'nullable|email',
 
             'type_of_good' => 'required|in:Document,Parcel',
             'delivery_provider' => 'required|in:DEHL,STARTRACK,ZOOM2U,TGE',
@@ -60,10 +60,6 @@ class DeliveryFormController extends Controller
 
         $delivery = DeliveryForm::create($validated);
 
-        return response()->json([
-            'message' => 'Delivery created successfully',
-            'delivery' => $delivery
-        ], 201);
     }
 
     public function updateStatus(Request $request, DeliveryForm $delivery)
@@ -71,15 +67,15 @@ class DeliveryFormController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:Pending,Shipped,Cancelled'
         ]);
-
+    
         if ($delivery->status === 'Shipped' && $validated['status'] === 'Cancelled') {
             return response()->json(['message' => 'Cannot cancel a shipped delivery.'], 403);
         }
-
+    
         $delivery->update(['status' => $validated['status']]);
-
-        return response()->json(['message' => 'Status updated successfully']);
+    
     }
+    
 
 
     /**
